@@ -22,9 +22,9 @@ class CreateItemsTable extends Migration {
 			$table->string('description');
 			$table->integer('price');
 			$table->string('tag_for_search', 255)->index();
-			$table->dateTime('created');
-			$table->dateTime('modified');
-			$table->dateTime('deleted')->nullable();
+			$table->dateTime('created_at');
+			$table->dateTime('updated_at');
+			$table->dateTime('deleted_at')->nullable();
 		});
 	}
 
