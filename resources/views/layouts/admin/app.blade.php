@@ -90,7 +90,9 @@
         <main class="py-4">
             <div class="container">
                 <div class="row">
-                    @include('layouts.admin.menu')
+                    @auth
+                        @include('layouts.admin.menu')
+                    @endauth
                     @yield('content')
                 </div>
             </div>
