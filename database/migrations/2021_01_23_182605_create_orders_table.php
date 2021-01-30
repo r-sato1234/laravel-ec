@@ -21,9 +21,9 @@ class CreateOrdersTable extends Migration {
 			$table->integer('status');
 			$table->dateTime('fix_date')->nullable();
 			$table->dateTime('mail_send_date')->nullable();
-			$table->dateTime('created');
-			$table->dateTime('modified');
-			$table->dateTime('deleted')->nullable();
+			$table->dateTime('created_at');
+			$table->dateTime('updated_at');
+			$table->dateTime('deleted_at')->nullable();
 		});
 	}
 

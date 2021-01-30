@@ -9,7 +9,7 @@
 
 ### 新規登録 ... 2人日
 * 必須
-```
+```/Users/r_sato/work/docker-laravel/backend/spec/db.md
 画像(写真)
 説明文
 登録日
