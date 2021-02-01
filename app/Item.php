@@ -7,6 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class Item extends Model
 {
     /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'admin_id', 'name', 'description', 'price', 'tag_for_search', 'img',
+    ];
+
+    /**
      * ログインしているユーザーの商品一覧を取得する
      *
      * @param int $admin_id

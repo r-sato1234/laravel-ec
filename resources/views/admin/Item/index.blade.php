@@ -6,6 +6,7 @@
         <div class="card-header">一覧画面</div>
 
         <div class="card-body">
+			<div class="mb-1"><a class="btn btn-primary" href="{{ route('admin.items.add') }}" role="button">新規登録</a></div>
 			@include('layouts.flash_message')
 			@if ($items->count() != 0)
 			<div class="mt-3">

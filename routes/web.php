@@ -53,6 +53,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function() {
     Route::post('logout', 'Admin\LoginController@logout')->name('admin.logout');
     Route::get('home', 'Admin\HomeController@index')->name('admin.home');
     Route::get('items', 'Admin\ItemsController@index')->name('admin.items');
+    Route::match(['get', 'post'], 'items/add', 'Admin\ItemsController@add')->name('admin.items.add');
+    Route::match(['get', 'post'], 'items/edit/{id}', 'Admin\ItemsController@edit')->name('admin.items.edit');
+    Route::post('items/create', 'Admin\ItemsController@create')->name('admin.items.create');
+    Route::post('items/update/{id}', 'Admin\ItemsController@update')->name('admin.items.update');
     Route::get('items/view/{id}', 'Admin\ItemsController@view')->name('admin.items.view');
     Route::get('orders', 'Admin\OrdersController@index')->name('admin.orders');
 });

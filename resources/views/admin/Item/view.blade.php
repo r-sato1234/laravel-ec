@@ -6,6 +6,7 @@
         <div class="card-header">詳細画面</div>
 
         <div class="card-body">
+			@include('layouts.flash_message')
 			<table class="table">
 				<tr>
 				<td>商品名</td>
@@ -27,7 +28,14 @@
 				<td>{{ $item->tag_for_search }}</td>
 				</tr>
 			</table>
-			<a class="btn btn-secondary" href="{{ route('admin.items') }}" role="button">戻る</a>
+			<div class="btn-toolbar" role="toolbar">
+				<div class="btn-group mr-2" role="group">
+					<a class="btn btn-secondary" href="{{ route('admin.items') }}" role="button">戻る</a>
+				</div>
+				<div class="btn-group mr-2" role="group">
+					<a class="btn btn-primary" href="{{ route('admin.items.edit', ['id' => $item->id]) }}" role="button">編集</a>
+				</div>
+			</div>
         </div>
     </div>
 </div>

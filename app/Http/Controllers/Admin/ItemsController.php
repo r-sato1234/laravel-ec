@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Item;
 use Illuminate\Http\Request;
+use App\Http\Requests\ItemRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -59,5 +60,70 @@ class ItemsController extends Controller
         return view('admin.Item.view', [
             'item' => $item
         ]);
+    }
+
+    /**
+     * 新規登録
+     *
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function add(Request $request)
+    {
+        $item = new Item();
+        return view('admin.Item.edit', compact('item'));
+    }
+
+    /**
+     * 編集
+     *
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function edit(Request $request, $id) {
+        $admin = Auth::user();
+        $item = $this->Items->findByAdminIdAndId($admin->getAttribute('id'), $id);
+
+        return view('admin.Item.edit', compact('item', 'id'));
+    }
+
+    /**
+     * 新規登録
+     *
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function create(ItemRequest $request) {
+        $admin = Auth::user();
+        $this->Items->create([
+            'admin_id' => $admin->getAttribute('id'),
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'price' => $request->input('price'),
+            'tag_for_search' => $request->input('tag_for_search'),
+            'img' => 'test'
+        ]);
+        // set_message('商品を追加しました。');
+        session()->flash('success', '商品を追加しました');
+
+        return redirect(route('admin.items'));
+    }
+
+    /**
+     * 編集
+     *
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function update(ItemRequest $request, $id) {
+        $item = $this->Items->findOrFail($id);
+        $item->fill([
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'price' => $request->input('price'),
+            'tag_for_search' => $request->input('tag_for_search'),
+            // 'img' => 'test'
+        ]);
+        $item->save();
+        // set_message('内容を修正しました。');
+        session()->flash('success', '商品を編集しました');
+
+        return redirect(route('admin.items.view', ['id' => $id]));
     }
 }
