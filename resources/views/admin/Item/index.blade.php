@@ -6,6 +6,8 @@
         <div class="card-header">一覧画面</div>
 
         <div class="card-body">
+			@include('layouts.flash_message')
+			@if ($items->count() != 0)
 			<div class="mt-3">
 				{{ $items->links() }}
 			</div>
@@ -29,10 +31,10 @@
 					@endforeach
 				</tbody>
 			</table>
-
 			<div class="mt-3">
 				{{ $items->links() }}
 			</div>
+			@endif
         </div>
     </div>
 </div>

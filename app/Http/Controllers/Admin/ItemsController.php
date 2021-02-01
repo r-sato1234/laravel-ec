@@ -33,6 +33,10 @@ class ItemsController extends Controller
         $admin = Auth::user();
         $items = $this->Items->findByAdminId($admin->getAttribute('id'))->paginate(20);
 
+        if ($items->count() == 0) {
+            session()->flash('error', '商品が存在しません');
+        }
+
         return view('admin.Item.index', [
             'items' => $items
         ]);
@@ -47,6 +51,10 @@ class ItemsController extends Controller
     {
         $admin = Auth::user();
         $item = $this->Items->findByAdminIdAndId($admin->getAttribute('id'), $id);
+
+        if (!$item) {
+            return redirect()->route('admin.items')->with('error', '存在しない商品です');;
+        }
 
         return view('admin.Item.view', [
             'item' => $item
