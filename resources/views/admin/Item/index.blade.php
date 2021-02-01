@@ -9,7 +9,7 @@
 			<div class="mt-3">
 				{{ $items->links() }}
 			</div>
-			<table class="table">
+			<table class="table table-striped">
 				<thead>
 					<tr>
 					<th scope="col">商品名</th>
@@ -21,7 +21,7 @@
 				<tbody>
 					@foreach ($items as $item)
 					<tr>
-					<td>{{ $item->name }}</td>
+					<td><a href="{{ route('admin.items.view', ['id' => $item->id]) }}">{{ $item->name }}</a></td>
 					<td>{{ $item->price }}円</td>
 					<td>{{ $item->description }}</td>
 					<td>{{ $item->tag_for_search }}</td>

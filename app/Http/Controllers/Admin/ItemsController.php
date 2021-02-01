@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * 商品管理
+ */
 class ItemsController extends Controller
 {
     /**
@@ -21,9 +24,9 @@ class ItemsController extends Controller
     }
 
     /**
-     * Show the application dashboard.
+     * 一覧
      *
-     * @return \Illuminate\Contracts\Support\Renderable
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function index()
     {
@@ -32,6 +35,21 @@ class ItemsController extends Controller
 
         return view('admin.Item.index', [
             'items' => $items
+        ]);
+    }
+
+    /**
+     * 詳細
+     *
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function view($id)
+    {
+        $admin = Auth::user();
+        $item = $this->Items->findByAdminIdAndId($admin->getAttribute('id'), $id);
+
+        return view('admin.Item.view', [
+            'item' => $item
         ]);
     }
 }
