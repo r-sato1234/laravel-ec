@@ -14,6 +14,15 @@
 				</tr>
 
 				<tr>
+				<td>画像</td>
+				<td>
+					@if ($item->img)
+					<img src="/uploads/items/{{ $item->id }}/{{ $item->img }}" width="200px" height="200px">
+					@endif
+				</td>
+				</tr>
+
+				<tr>
 				<td>価格</td>
 				<td>{{ $item->price }}円</td>
 				</tr>

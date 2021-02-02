@@ -28,6 +28,7 @@ class ItemRequest extends FormRequest
             'price' => 'required|integer',
             'description' => 'required|string|max:2000',
             'tag_for_search' => 'required|string|max:1000',
+            'img' => 'required|image|file',
         ];
     }
 
@@ -42,7 +43,8 @@ class ItemRequest extends FormRequest
             'name' => '商品名',
             'price' => '価格',
             'description' => '説明文',
-            'tag_for_search' => '検索用タグ'
+            'tag_for_search' => '検索用タグ',
+            'img' => '画像'
         ];
     }
 }

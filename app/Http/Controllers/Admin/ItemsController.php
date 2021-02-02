@@ -104,13 +104,14 @@ class ItemsController extends Controller
      */
     public function create(ItemRequest $request) {
         $admin = Auth::user();
+        $file_name = $this->__imgUpdate($request->file('img'), $this->Items->getInsertId());
         $this->Items->create([
             'admin_id' => $admin->getAttribute('id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'price' => $request->input('price'),
             'tag_for_search' => $request->input('tag_for_search'),
-            'img' => 'test'
+            'img' => $file_name
         ]);
         // set_message('商品を追加しました。');
         session()->flash('success', '商品を追加しました');
@@ -125,17 +126,36 @@ class ItemsController extends Controller
      */
     public function update(ItemRequest $request, $id) {
         $item = $this->Items->findOrFail($id);
+        $file_name = $this->__imgUpdate($request->file('img'), $id);
         $item->fill([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'price' => $request->input('price'),
             'tag_for_search' => $request->input('tag_for_search'),
-            // 'img' => 'test'
+            'img' => $file_name
         ]);
         $item->save();
         // set_message('内容を修正しました。');
         session()->flash('success', '商品を編集しました');
 
         return redirect(route('admin.items.view', ['id' => $id]));
+    }
+
+    /**
+     * 画像をアップロードする
+     *
+     * @param Illuminate\Http\UploadedFile $file
+     * @param int $id
+     * @return string
+     */
+    private function __imgUpdate($file, $id) {
+        $file_name = '';
+        if ($file->isValid()) {
+            $file_name = time() . '_' . $file->getClientOriginalName();
+            $target_path = public_path('uploads/items/' . $id . '/');
+            $file->move($target_path, $file_name);
+        }
+
+        return $file_name;
     }
 }

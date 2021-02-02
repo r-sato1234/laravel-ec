@@ -16,6 +16,7 @@
 				<thead>
 					<tr>
 					<th scope="col">商品名</th>
+					<th scope="col">画像</th>
 					<th scope="col">価格</th>
 					<th scope="col">説明文</th>
 					<th scope="col">検索用タグ</th>
@@ -25,6 +26,7 @@
 					@foreach ($items as $item)
 					<tr>
 					<td><a href="{{ route('admin.items.view', ['id' => $item->id]) }}">{{ $item->name }}</a></td>
+					<td><img src="/uploads/items/{{ $item->id }}/{{ $item->img }}" width="50px" height="50px"></td>
 					<td>{{ $item->price }}円</td>
 					<td>{{ $item->description }}</td>
 					<td>{{ $item->tag_for_search }}</td>

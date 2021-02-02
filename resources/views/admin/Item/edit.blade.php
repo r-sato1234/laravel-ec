@@ -31,7 +31,7 @@
 				?>
 			@endif
 
-			<form method="post" action="{{ $action }}">
+			<form method="post" action="{{ $action }}" enctype="multipart/form-data">
 				{{ csrf_field() }}
 				<table class="table">
 					<tr>
@@ -39,6 +39,18 @@
 					<td>
 						<input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $name }}">
 						@error('name')
+							<span class="invalid-feedback" role="alert">
+								<strong>{{ $message }}</strong>
+							</span>
+						@enderror
+					</td>
+					</tr>
+
+					<tr>
+					<td>画像</td>
+					<td>
+						<input type="file" name="img" class="@error('img') is-invalid @enderror">
+						@error('img')
 							<span class="invalid-feedback" role="alert">
 								<strong>{{ $message }}</strong>
 							</span>

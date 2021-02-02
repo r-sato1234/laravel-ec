@@ -29,4 +29,14 @@ class Item extends Model
             ->where('admin_id', $auth_id)
             ->exists();
     }
+
+    /**
+     * インサートするレコードのIDを取得する
+     *
+     * @return int
+     */
+    public function getInsertId()
+    {
+        return $this->orderBy('id', 'desc')->first()->getAttribute('id') + 1;
+    }
 }
