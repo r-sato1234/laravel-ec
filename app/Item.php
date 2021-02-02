@@ -16,27 +16,17 @@ class Item extends Model
     ];
 
     /**
-     * ログインしているユーザーの商品一覧を取得する
+     * ログインしているユーザー製品か
      *
-     * @param int $admin_id
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function findByAdminId($admin_id)
-    {
-        return $this->where('admin_id', $admin_id)->orderBy('id', 'desc');
-    }
-
-    /**
-     * ログインしているユーザーの商品詳細を取得する
-     *
-     * @param int $admin_id
      * @param int $id
-     * @return App\Item
+     * @param int $admin_id
+     * @return bool
      */
-    public function findByAdminIdAndId($admin_id, $id)
+    public function isAuthUserItem($id, $auth_id)
     {
-        return $this->findByAdminId($admin_id)
+        return $this
             ->where('id', $id)
-            ->first();
+            ->where('admin_id', $auth_id)
+            ->exists();
     }
 }

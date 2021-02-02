@@ -32,9 +32,11 @@
 				<div class="btn-group mr-2" role="group">
 					<a class="btn btn-secondary" href="{{ route('admin.items') }}" role="button">戻る</a>
 				</div>
+				@if ($item->admin_id === Auth::id())
 				<div class="btn-group mr-2" role="group">
 					<a class="btn btn-primary" href="{{ route('admin.items.edit', ['id' => $item->id]) }}" role="button">編集</a>
 				</div>
+				@endif
 			</div>
         </div>
     </div>

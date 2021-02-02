@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Item;
+use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\ItemRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
  * 商品管理
@@ -32,7 +34,7 @@ class ItemsController extends Controller
     public function index()
     {
         $admin = Auth::user();
-        $items = $this->Items->findByAdminId($admin->getAttribute('id'))->paginate(20);
+        $items = $this->Items->orderBy('id', 'desc')->paginate(20);
 
         if ($items->count() == 0) {
             session()->flash('error', '商品が存在しません');
@@ -50,16 +52,15 @@ class ItemsController extends Controller
      */
     public function view($id)
     {
-        $admin = Auth::user();
-        $item = $this->Items->findByAdminIdAndId($admin->getAttribute('id'), $id);
+        try {
+            $item = $this->Items->findOrFail($id);
 
-        if (!$item) {
-            return redirect()->route('admin.items')->with('error', '存在しない商品です');;
+            return view('admin.Item.view', compact('item'));
+        } catch (ModelNotFoundException $e) {
+            session()->flash('error', '存在しない商品です');
         }
 
-        return view('admin.Item.view', [
-            'item' => $item
-        ]);
+        return redirect(route('admin.items'));
     }
 
     /**
@@ -79,10 +80,21 @@ class ItemsController extends Controller
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function edit(Request $request, $id) {
-        $admin = Auth::user();
-        $item = $this->Items->findByAdminIdAndId($admin->getAttribute('id'), $id);
+        try {
+            $item = $this->Items->findOrFail($id);
 
-        return view('admin.Item.edit', compact('item', 'id'));
+            if (!$this->Items->isAuthUserItem($id, Auth::user()->getAttribute('id'))) {
+                throw new \Exception('編集できない製品です');
+            }
+
+            return view('admin.Item.edit', compact('item', 'id'));
+        } catch (ModelNotFoundException $e) {
+            session()->flash('error', '存在しない商品です');
+        } catch (Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
+
+        return redirect(route('admin.items'));
     }
 
     /**
