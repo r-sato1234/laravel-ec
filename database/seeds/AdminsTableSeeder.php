@@ -14,8 +14,8 @@ class AdminsTableSeeder extends Seeder
         $table = DB::table('admins');
         $table->truncate();
         $table->insert([
-            'name' => 'r_sato',
-            'email' => 'r_sato@example.com',
+            'name' => '田中 太郎',
+            'email' => 'tanaka@example.com',
             'password' => bcrypt('12345678'),
             'created_at' => '2021-01-01 10:00:00',
             'updated_at' => '2021-01-01 10:00:00'

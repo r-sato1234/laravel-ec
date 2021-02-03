@@ -17,6 +17,7 @@ class CreateOrdersTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('user_id');
+			$table->integer('address_id');
 			$table->string('order_code');
 			$table->integer('status');
 			$table->dateTime('fix_date')->nullable();

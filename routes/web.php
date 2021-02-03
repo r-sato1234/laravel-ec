@@ -59,4 +59,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function() {
     Route::post('items/update/{id}', 'Admin\ItemsController@update')->name('admin.items.update');
     Route::get('items/view/{id}', 'Admin\ItemsController@view')->name('admin.items.view');
     Route::get('orders', 'Admin\OrdersController@index')->name('admin.orders');
+    Route::get('orders/view/{id}', 'Admin\OrdersController@view')->name('admin.orders.view');
 });
