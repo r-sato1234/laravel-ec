@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,6 +24,11 @@ class Order extends Model
      */
     protected $fillable = [
     ];
+
+    public function getStatusTextAttribute()
+    {
+        return Arr::get(self::STATUSES, $this->status);
+    }
 
     /**
      * 注文製品を取得

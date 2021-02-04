@@ -1,12 +1,14 @@
 <?php
-use App\Order;
-use Illuminate\Support\Arr;
+use Helpers\OrderHelper;
 ?>
 
 @extends('layouts.admin.app')
 
 @section('content')
 <style>
+	.font-large {
+		font-size: 15px
+	}
 	.font-small {
 		font-size: 13px
 	}
@@ -59,7 +61,7 @@ use Illuminate\Support\Arr;
 						<tr class="d-flex">
 						<td class="col-1"><a data-toggle="collapse" href="#collapse-{{ $order->id }}" role="button" aria-expanded="false" aria-controls="collapseExample">▼</a></td>
 						<td class="col-3"><a href="{{ route('admin.orders.view', ['id' => $order->id]) }}">{{ $order->order_code }}</a></td>
-						<td class="col-2">{{ Arr::get(Order::STATUSES, $order->status) }}</td>
+						<td class="col-2">{!!  OrderHelper::getStatusLabel($order) !!}</td>
 						<td class="col-3">{{ $order->user()->getResults()->getAttribute('name') }}</td>
 						<td class="col-3">{{ $order->created_at }}</td>
 						</tr>
