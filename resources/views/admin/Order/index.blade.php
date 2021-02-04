@@ -1,3 +1,8 @@
+<?php
+use App\Order;
+use Illuminate\Support\Arr;
+?>
+
 @extends('layouts.admin.app')
 
 @section('content')
@@ -47,14 +52,15 @@
 				</li>
 
 				@foreach ($orders as $order)
+				<?php $sum = 0 ?>
 				<li>
 				<table class="table">
 					<tbody>
 						<tr class="d-flex">
 						<td class="col-1"><a data-toggle="collapse" href="#collapse-{{ $order->id }}" role="button" aria-expanded="false" aria-controls="collapseExample">▼</a></td>
 						<td class="col-3"><a href="{{ route('admin.orders.view', ['id' => $order->id]) }}">{{ $order->order_code }}</a></td>
-						<td class="col-2">{{ $order->status }}</td>
-						<td class="col-3">{{ $order->user_id }}</td>
+						<td class="col-2">{{ Arr::get(Order::STATUSES, $order->status) }}</td>
+						<td class="col-3">{{ $order->user()->getResults()->getAttribute('name') }}</td>
 						<td class="col-3">{{ $order->created_at }}</td>
 						</tr>
 					</tbody>
@@ -67,14 +73,23 @@
 								<tr>
 								<th scope="col"><span class="font-small">商品名</span></th>
 								<th scope="col"><span class="font-small">金額</span></th>
-								<th scope="col"><span class="font-small">合計金額</span></th>
+								<th scope="col"><span class="font-small">数量</span></th>
+								<th scope="col"><span class="font-small">小計</span></th>
 								</tr>
 							</thead>
 							<tbody>
+								@foreach ($order->orderItems()->getResults() as $order_item)
+								<?php $sum += $order_item->getAttribute('sub_total_price') ?>
 								<tr>
-									<td>いちご</td>
-									<td>298</td>
-									<td>1980</td>
+									<td>{{ $order_item->item()->getResults()->getAttribute('name') }}</td>
+									<td>{{ $order_item->getAttribute('price') }}</td>
+									<td>{{ $order_item->getAttribute('item_count') }}</td>
+									<td>{{ $order_item->getAttribute('sub_total_price') }}</td>
+								</tr>
+								@endforeach
+								<tr>
+									<td colspan="3" class="font-weight-bold">合計</td>
+									<td>{{ $sum }}</td>
 								</tr>
 							</tbody>
 						</table>

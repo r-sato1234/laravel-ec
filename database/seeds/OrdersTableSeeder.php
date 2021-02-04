@@ -60,6 +60,13 @@ class OrdersTableSeeder extends Seeder
                 'created_at' => '2021-02-01 10:00:00',
                 'updated_at' => '2021-02-01 10:00:00'
             ],
+            [
+                'order_id' => 2,
+                'item_id' => 2,
+                'price' => 198,
+                'created_at' => '2021-02-01 10:00:00',
+                'updated_at' => '2021-02-01 10:00:00'
+            ],
         ]);
     }
 }
