@@ -5,17 +5,22 @@ namespace App;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    const STATUS_UNCONFIRMED = 1;
-    const STATUS_CONFIRMED = 2;
-    const STATUS_CANCELLED = 3;
+    use SoftDeletes;
+
+    const STATUS_UNCONFIRMED = 1; // 未確認
+    const STATUS_CONFIRMED = 2; // 注文確定
+    const STATUS_CANCELLED = 3; // キャンセル
     const STATUSES = [
         self::STATUS_UNCONFIRMED => '未確認',
         self::STATUS_CONFIRMED => '注文確定',
         self::STATUS_CANCELLED => 'キャンセル'
     ];
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that are mass assignable.
@@ -23,11 +28,23 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
+        'status', 'fix_date', 'deleted_at'
     ];
 
+    /**
+     * ステータス文言
+     */
     public function getStatusTextAttribute()
     {
         return Arr::get(self::STATUSES, $this->status);
+    }
+
+    /**
+     * 未確認の注文か
+     */
+    public function getIsUnconfirmedAttribute()
+    {
+        return $this->status === self::STATUS_UNCONFIRMED;
     }
 
     /**

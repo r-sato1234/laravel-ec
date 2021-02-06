@@ -20,9 +20,8 @@ class CreateAddressesTable extends Migration {
 			$table->integer('prefecture_id');
 			$table->string('zip', 7);
 			$table->string('address', 100);
-			$table->dateTime('created_at');
-			$table->dateTime('updated_at');
-			$table->dateTime('deleted_at')->nullable();
+			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

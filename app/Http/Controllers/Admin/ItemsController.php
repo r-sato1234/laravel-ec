@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Item;
-use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\ItemRequest;
 use App\Http\Controllers\Controller;
@@ -48,6 +47,7 @@ class ItemsController extends Controller
     /**
      * 詳細
      *
+     * @param string $id
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function view($id)
@@ -66,6 +66,7 @@ class ItemsController extends Controller
     /**
      * 新規登録
      *
+     * @param Request $request
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function add(Request $request)
@@ -77,6 +78,8 @@ class ItemsController extends Controller
     /**
      * 編集
      *
+     * @param Request $request
+     * @param string $id
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function edit(Request $request, $id) {
@@ -90,7 +93,7 @@ class ItemsController extends Controller
             return view('admin.Item.edit', compact('item', 'id'));
         } catch (ModelNotFoundException $e) {
             session()->flash('error', '存在しない商品です');
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             session()->flash('error', $e->getMessage());
         }
 
@@ -100,6 +103,7 @@ class ItemsController extends Controller
     /**
      * 新規登録
      *
+     * @param ItemRequest $request
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function create(ItemRequest $request) {
@@ -122,6 +126,8 @@ class ItemsController extends Controller
     /**
      * 編集
      *
+     * @param ItemRequest $request
+     * @param string $id
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
     public function update(ItemRequest $request, $id) {
