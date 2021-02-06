@@ -17,9 +17,10 @@ class ItemsTableSeeder extends Seeder
             [
                 'admin_id' => 1,
                 'name' => 'りんご',
-                'img' => 'ringo',
+                'img' => '',
                 'description' => 'りんごです',
                 'price' => 198,
+                'stock' => 1000,
                 'tag_for_search' => 'りんご|リンゴ|アップル',
                 'created_at' => '2021-01-01 10:00:00',
                 'updated_at' => '2021-01-01 10:00:00'
@@ -27,9 +28,10 @@ class ItemsTableSeeder extends Seeder
             [
                 'admin_id' => 2,
                 'name' => 'みかん',
-                'img' => 'mikan',
+                'img' => '',
                 'description' => 'みかんです',
                 'price' => 298,
+                'stock' => 1000,
                 'tag_for_search' => 'みかん|ミカン',
                 'created_at' => '2021-01-01 10:00:00',
                 'updated_at' => '2021-01-01 10:00:00'
@@ -37,9 +39,10 @@ class ItemsTableSeeder extends Seeder
             [
                 'admin_id' => 1,
                 'name' => 'いちご',
-                'img' => 'itigo',
+                'img' => '',
                 'description' => 'いちごです',
                 'price' => 298,
+                'stock' => 1000,
                 'tag_for_search' => 'いちご|イチゴ',
                 'created_at' => '2021-01-01 10:00:00',
                 'updated_at' => '2021-01-01 10:00:00'

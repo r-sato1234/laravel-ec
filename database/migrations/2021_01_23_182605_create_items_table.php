@@ -20,11 +20,11 @@ class CreateItemsTable extends Migration {
 			$table->string('name', 50);
 			$table->string('img', 50);
 			$table->string('description');
-			$table->integer('price');
+			$table->integer('price')->default(0);
+			$table->integer('stock');
 			$table->string('tag_for_search', 255)->index();
-			$table->dateTime('created_at');
-			$table->dateTime('updated_at');
-			$table->dateTime('deleted_at')->nullable();
+			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

@@ -19,9 +19,8 @@ class CreateOrderItemsTable extends Migration {
 			$table->integer('order_id');
 			$table->integer('item_id');
 			$table->integer('price');
-			$table->dateTime('created_at');
-			$table->dateTime('updated_at');
-			$table->dateTime('deleted_at')->nullable();
+			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 

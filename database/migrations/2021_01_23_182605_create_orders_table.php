@@ -17,13 +17,13 @@ class CreateOrdersTable extends Migration {
 		{
 			$table->increments('id');
 			$table->integer('user_id');
+			$table->integer('address_id');
 			$table->string('order_code');
 			$table->integer('status');
 			$table->dateTime('fix_date')->nullable();
 			$table->dateTime('mail_send_date')->nullable();
-			$table->dateTime('created_at');
-			$table->dateTime('updated_at');
-			$table->dateTime('deleted_at')->nullable();
+			$table->timestamps();
+			$table->softDeletes();
 		});
 	}
 
