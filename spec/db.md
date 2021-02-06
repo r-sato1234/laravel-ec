@@ -41,6 +41,7 @@ CREATE TABLE items (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, /* ID */
     admin_id INT NOT NULL,                      /* 管理者ID */
     name VARCHAR(50) NOT NULL,                  /* 商品名 */
+    status INT NOT NULL　DEFAULT 1,             /* 販売ステータス */
     img VARCHAR(50) NOT NULL,                   /* 画像 */
     description VARCHAR(255) NOT NULL,          /* 説明文 */
     price INT NOT NULL,                         /* 価格 */

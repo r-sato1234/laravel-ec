@@ -18,6 +18,7 @@ class CreateItemsTable extends Migration {
 			$table->increments('id');
 			$table->integer('admin_id')->index();
 			$table->string('name', 50);
+			$table->integer('status')->default(1);
 			$table->string('img', 50);
 			$table->string('description');
 			$table->integer('price')->default(0);

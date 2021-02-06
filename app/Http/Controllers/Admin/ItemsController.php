@@ -156,10 +156,80 @@ class ItemsController extends Controller
     public function delete($id)
     {
         try {
+            if (!$this->Items->isAuthUserItem($id, Auth::user()->getAttribute('id'))) {
+                throw new \Exception('削除できない製品です');
+            }
+
             $this->Items->findOrFail($id)->delete();
             session()->flash('success', '商品を削除しました');
 
             return redirect(route('admin.items'));
+        } catch (ModelNotFoundException $e) {
+            session()->flash('error', '存在しない商品です');
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
+
+        return redirect(route('admin.items'));
+    }
+
+    /**
+     * 販売停止に変更する
+     *
+     * @param string $id
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function saleStop($id)
+    {
+        try {
+            if (!$this->Items->isAuthUserItem($id, Auth::user()->getAttribute('id'))) {
+                throw new \Exception('編集できない製品です');
+            }
+
+            $item = $this->Items->findOrFail($id);
+            if (!$item->is_sale) {
+                throw new \Exception('ステータスが販売中のみ変更可能です');
+            }
+
+            $item->fill([
+                'status' => Item::STATUS_SALE_STOP,
+            ]);
+            $item->save();
+
+            session()->flash('success', '販売停止に変更しました');
+        } catch (ModelNotFoundException $e) {
+            session()->flash('error', '存在しない商品です');
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
+
+        return redirect(route('admin.items'));
+    }
+
+    /**
+     * 販売中に変更する
+     *
+     * @param string $id
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function sale($id)
+    {
+        try {
+            if (!$this->Items->isAuthUserItem($id, Auth::user()->getAttribute('id'))) {
+                throw new \Exception('編集できない製品です');
+            }
+
+            $item = $this->Items->findOrFail($id);
+            if (!$item->is_sale_stop) {
+                throw new \Exception('ステータスが販売停止のみ変更可能です');
+            }
+
+            $item->fill([
+                'status' => Item::STATUS_SALE,
+            ]);
+            $item->save();
+
+            session()->flash('success', '販売中に変更しました');
         } catch (ModelNotFoundException $e) {
             session()->flash('error', '存在しない商品です');
         } catch (\Exception $e) {

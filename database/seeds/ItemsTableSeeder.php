@@ -17,6 +17,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'admin_id' => 1,
                 'name' => 'りんご',
+                'status' => 1,
                 'img' => '',
                 'description' => 'りんごです',
                 'price' => 198,
@@ -28,6 +29,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'admin_id' => 2,
                 'name' => 'みかん',
+                'status' => 1,
                 'img' => '',
                 'description' => 'みかんです',
                 'price' => 298,
@@ -39,6 +41,7 @@ class ItemsTableSeeder extends Seeder
             [
                 'admin_id' => 1,
                 'name' => 'いちご',
+                'status' => 1,
                 'img' => '',
                 'description' => 'いちごです',
                 'price' => 298,
