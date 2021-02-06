@@ -20,7 +20,7 @@ class OrdersTableSeeder extends Seeder
                 'order_code' => 'X2021-0203001',
                 'status' => 1,
                 'fix_date' => null,
-                'mail_send_date' => null,
+                'delivery_completed_date' => null,
                 'created_at' => '2021-01-01 10:00:00',
                 'updated_at' => '2021-01-01 10:00:00'
             ],
@@ -30,7 +30,7 @@ class OrdersTableSeeder extends Seeder
                 'order_code' => 'X2021-0203002',
                 'status' => 2,
                 'fix_date' => '2021-01-02 12:00:00',
-                'mail_send_date' => '2021-01-02 13:10:10',
+                'delivery_completed_date' => null,
                 'created_at' => '2021-01-01 10:00:00',
                 'updated_at' => '2021-01-01 10:00:00'
             ],

@@ -43,6 +43,15 @@ use Helpers\OrderHelper;
 						</form>
 					</div>
 				</div>
+				@elseif ($order->is_confirmed)
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group mr-2" role="group">
+						<form action="{{ route('admin.orders.deliveryComplete', ['id' => $order->id]) }}" id="form_delivery_complete" method="post">
+						{{ csrf_field() }}
+						<a href="#" data-id="{{ $order->id }}" class="btn btn-primary btn-sm" onclick="deliveryCompletePost();">配送完了メール送信</a>
+						</form>
+					</div>
+				</div>
 				@endif
 				</td>
 				</tr>
@@ -61,6 +70,13 @@ use Helpers\OrderHelper;
 				<tr>
 				<td>注文確定日時</td>
 				<td>{{ $order->fix_date }}</td>
+				</tr>
+				@endif
+
+				@if ($order->delivery_completed_date)
+				<tr>
+				<td>配送完了日時</td>
+				<td>{{ $order->delivery_completed_date }}</td>
 				</tr>
 				@endif
 
@@ -118,7 +134,7 @@ function cancelPost() {
   'use strict';
 
   if (confirm('本当にキャンセルしてもよろしいですか？')) {
-  	document.getElementById('form_cancel').submit();
+    document.getElementById('form_cancel').submit();
   }
 }
 
@@ -126,8 +142,17 @@ function fixPost() {
   'use strict';
 
   if (confirm('本当に確定してもよろしいですか？')) {
-  	document.getElementById('form_fix').submit();
+    document.getElementById('form_fix').submit();
   }
 }
+
+function deliveryCompletePost() {
+  'use strict';
+
+  if (confirm('本当に配送完了メールを送信してもよろしいですか？')) {
+    document.getElementById('form_delivery_complete').submit();
+  }
+}
+
 </script>
 @endsection

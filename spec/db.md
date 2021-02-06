@@ -53,16 +53,16 @@ CREATE TABLE items (
 /* orders - 注文 */
 drop table if exists orders;
 CREATE TABLE orders (
-    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY, /* ID */
-    user_id INT NOT NULL,                       /* ユーザーID */
-    address_id INT NOT NULL,                    /* 配送先ID */
-    order_code VARCHAR(255) NOT NULL,           /* 注文番号 */
-    status INT NOT NULL,                        /* ステータス */
-    fix_date DATETIME DEFAULT NULL,             /* 注文確定日時 */
-    mail_send_date DATETIME DEFAULT NULL,       /* メール送信日時 */
-    created_at DATETIME NOT NULL,               /* 作成日時 */
-    updated_at DATETIME NOT NULL,               /* 更新日時 */
-    deleted_at DATETIME DEFAULT NULL            /* 削除日時 */
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,    /* ID */
+    user_id INT NOT NULL,                          /* ユーザーID */
+    address_id INT NOT NULL,                       /* 配送先ID */
+    order_code VARCHAR(255) NOT NULL,              /* 注文番号 */
+    status INT NOT NULL,                           /* ステータス */
+    fix_date DATETIME DEFAULT NULL,                /* 注文確定日時 */
+    delivery_completed_date DATETIME DEFAULT NULL, /* 配送完了(メール送信)日時 */
+    created_at DATETIME NOT NULL,                  /* 作成日時 */
+    updated_at DATETIME NOT NULL,                  /* 更新日時 */
+    deleted_at DATETIME DEFAULT NULL               /* 削除日時 */
 );
 
 /* order_items - 注文商品 */

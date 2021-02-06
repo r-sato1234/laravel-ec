@@ -13,10 +13,12 @@ class Order extends Model
 
     const STATUS_UNCONFIRMED = 1; // 未確認
     const STATUS_CONFIRMED = 2; // 注文確定
-    const STATUS_CANCELLED = 3; // キャンセル
+    const STATUS_DELIVERY_COMPLETED = 3; // 配送完了
+    const STATUS_CANCELLED = 99; // キャンセル
     const STATUSES = [
         self::STATUS_UNCONFIRMED => '未確認',
         self::STATUS_CONFIRMED => '注文確定',
+        self::STATUS_DELIVERY_COMPLETED => '配送完了',
         self::STATUS_CANCELLED => 'キャンセル'
     ];
 
@@ -28,7 +30,7 @@ class Order extends Model
      * @var array
      */
     protected $fillable = [
-        'status', 'fix_date', 'deleted_at'
+        'status', 'fix_date', 'delivery_completed_date', 'deleted_at'
     ];
 
     /**
@@ -45,6 +47,14 @@ class Order extends Model
     public function getIsUnconfirmedAttribute()
     {
         return $this->status === self::STATUS_UNCONFIRMED;
+    }
+
+    /**
+     * 確定の注文か
+     */
+    public function getIsConfirmedAttribute()
+    {
+        return $this->status === self::STATUS_CONFIRMED;
     }
 
     /**

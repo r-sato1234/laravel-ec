@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Order;
 use Carbon\Carbon;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderDeliveryCompletedMail;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
@@ -72,7 +75,7 @@ class OrdersController extends Controller
         try {
             $order = $this->Orders->findOrFail($id);
             if (!$order->is_unconfirmed) {
-                throw new \Exception('未確認の注文のみ確定可能です');
+                throw new \Exception('ステータスが未確認のみ確定可能です');
             }
 
             $order->fill([
@@ -104,7 +107,7 @@ class OrdersController extends Controller
         try {
             $order = $this->Orders->findOrFail($id);
             if (!$order->is_unconfirmed) {
-                throw new \Exception('未確認の注文のみキャンセル可能です');
+                throw new \Exception('ステータスが未確認のみキャンセル可能です');
             }
 
             $order->fill([
@@ -118,6 +121,44 @@ class OrdersController extends Controller
         } catch (ModelNotFoundException $e) {
             session()->flash('error', '存在しない注文です');
         } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
+
+        return redirect(route('admin.orders'));
+    }
+
+    /**
+     * 配送完了メール送信
+     *
+     * @param string $id
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function deliveryComplete($id)
+    {
+        try {
+            DB::beginTransaction();
+            $order = $this->Orders->findOrFail($id);
+            if (!$order->is_confirmed) {
+                throw new \Exception('ステータスが注文確定のみ配送可能です');
+            }
+
+            $order->fill([
+                'status' => Order::STATUS_DELIVERY_COMPLETED,
+                'delivery_completed_date' => Carbon::now(),
+            ]);
+            $order->save();
+
+            Mail::send(new OrderDeliveryCompletedMail($order));
+
+            session()->flash('success', '配送完了メールを送信しました');
+            DB::commit();
+
+            return redirect(route('admin.orders'));
+        } catch (ModelNotFoundException $e) {
+            DB::rollback();
+            session()->flash('error', '存在しない注文です');
+        } catch (\Exception $e) {
+            DB::rollback();
             session()->flash('error', $e->getMessage());
         }
 

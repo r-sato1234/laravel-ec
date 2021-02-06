@@ -62,4 +62,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function() {
     Route::get('orders/view/{id}', 'Admin\OrdersController@view')->name('admin.orders.view');
     Route::delete('orders/cancel/{id}', 'Admin\OrdersController@cancel')->name('admin.orders.cancel');
     Route::post('orders/fix/{id}', 'Admin\OrdersController@fix')->name('admin.orders.fix');
+    Route::post('orders/deliveryComplete/{id}', 'Admin\OrdersController@deliveryComplete')->name('admin.orders.deliveryComplete');
 });

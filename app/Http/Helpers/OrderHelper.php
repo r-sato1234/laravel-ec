@@ -16,6 +16,9 @@ class OrderHelper {
             case Order::STATUS_CONFIRMED:
                 $class = 'badge badge-success';
                 break;
+            case Order::STATUS_DELIVERY_COMPLETED:
+                $class = 'badge badge-primary';
+                break;
             case Order::STATUS_CANCELLED:
                 $class = 'badge badge-danger';
                 break;
