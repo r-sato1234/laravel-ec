@@ -21,7 +21,7 @@ class CreateOrdersTable extends Migration {
 			$table->string('order_code');
 			$table->integer('status');
 			$table->dateTime('fix_date')->nullable();
-			$table->dateTime('mail_send_date')->nullable();
+			$table->dateTime('delivery_completed_date')->nullable();
 			$table->timestamps();
 			$table->softDeletes();
 		});

@@ -58,8 +58,12 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function() {
     Route::post('items/create', 'Admin\ItemsController@create')->name('admin.items.create');
     Route::post('items/update/{id}', 'Admin\ItemsController@update')->name('admin.items.update');
     Route::get('items/view/{id}', 'Admin\ItemsController@view')->name('admin.items.view');
+    Route::delete('items/delete/{id}', 'Admin\ItemsController@delete')->name('admin.items.delete');
+    Route::post('items/sale/{id}', 'Admin\ItemsController@sale')->name('admin.items.sale');
+    Route::post('items/saleStop/{id}', 'Admin\ItemsController@saleStop')->name('admin.items.sale_stop');
     Route::get('orders', 'Admin\OrdersController@index')->name('admin.orders');
     Route::get('orders/view/{id}', 'Admin\OrdersController@view')->name('admin.orders.view');
     Route::delete('orders/cancel/{id}', 'Admin\OrdersController@cancel')->name('admin.orders.cancel');
     Route::post('orders/fix/{id}', 'Admin\OrdersController@fix')->name('admin.orders.fix');
+    Route::post('orders/deliveryComplete/{id}', 'Admin\OrdersController@deliveryComplete')->name('admin.orders.deliveryComplete');
 });
