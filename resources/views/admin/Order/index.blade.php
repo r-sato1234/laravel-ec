@@ -7,7 +7,7 @@ use Helpers\OrderHelper;
 @section('content')
 <style>
 	.font-large {
-		font-size: 15px
+		font-size: 14px
 	}
 	.font-small {
 		font-size: 13px

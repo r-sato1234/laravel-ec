@@ -148,6 +148,28 @@ class ItemsController extends Controller
     }
 
     /**
+     * 削除
+     *
+     * @param string $id
+     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function delete($id)
+    {
+        try {
+            $this->Items->findOrFail($id)->delete();
+            session()->flash('success', '商品を削除しました');
+
+            return redirect(route('admin.items'));
+        } catch (ModelNotFoundException $e) {
+            session()->flash('error', '存在しない商品です');
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+        }
+
+        return redirect(route('admin.items'));
+    }
+
+    /**
      * 画像をアップロードする
      *
      * @param Illuminate\Http\UploadedFile $file
