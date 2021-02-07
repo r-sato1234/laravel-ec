@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Order;
+use App\OrderItem;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderDeliveryCompletedMail;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
@@ -25,6 +28,7 @@ class OrdersController extends Controller
     {
         $this->middleware('auth:admin');
         $this->Orders = new Order();
+        $this->OrderItems = new OrderItem();
     }
 
     /**
@@ -159,5 +163,39 @@ class OrdersController extends Controller
         }
 
         return redirect(route('admin.orders'));
+    }
+
+    /**
+     * 売上CSVダウンロード
+     *
+     * @param Request $request
+     * @return Symfony\Component\HttpFoundation\StreamedResponse
+     */
+    public function export( Request $request )
+    {
+        $response = new StreamedResponse (function() use ($request){
+            $stream = fopen('php://output', 'w');
+
+            // 文字化け回避
+            stream_filter_prepend($stream,'convert.iconv.utf-8/cp932//TRANSLIT');
+
+            // タイトルを追加
+            fputcsv($stream, ['商品名','数量', '金額']);
+
+            $this->OrderItems
+                ->select(DB::raw('price, item_id, count(*) as item_count, sum(price) as sub_total_price'))
+                ->groupBy('item_id', 'price')
+                ->orderBy('item_id')
+                ->chunk(1000, function($results) use ($stream) {
+                    foreach ($results as $result) {
+                        fputcsv($stream, [$result->item()->getResults()->getAttribute('name'), $result->item_count, $result->sub_total_price]);
+                    }
+                });
+            fclose($stream);
+        });
+        $response->headers->set('Content-Type', 'application/octet-stream');
+        $response->headers->set('Content-Disposition', 'attachment; filename="order.csv"');
+
+        return $response;
     }
 }

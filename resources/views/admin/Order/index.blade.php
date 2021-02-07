@@ -34,6 +34,9 @@ use Helpers\OrderHelper;
         <div class="card-body">
 			@include('layouts.flash_message')
 			@if ($orders->count() != 0)
+			<div class="mb-3">
+			<a href="{{ route('admin.orders.export') }}" class="btn btn-primary font-weight-bold" onclick="return confirm('売上CSVをダウンロードしますか？');"><i class="fas fa-download"></i>売上CSVダウンロード</a>
+			</div>
 			<div class="mt-3">
 				{{ $orders->links() }}
 			</div>
