@@ -2,7 +2,10 @@
 
 namespace App;
 
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderItem extends Model
@@ -20,6 +23,15 @@ class OrderItem extends Model
     ];
 
     /**
+     * 注文を取得
+     */
+    public function order()
+    {
+        return $this
+            ->belongsTo('App\Order');
+    }
+
+    /**
      * 商品を取得
      */
     public function item()
@@ -28,5 +40,34 @@ class OrderItem extends Model
             ->belongsTo('App\Item')
             ->select('name')
             ->withTrashed();
+    }
+
+    /**
+     * 売上CSVダウンロード
+     *
+     * @param Builder $query
+     * @param array $params
+     * @return Builder
+     */
+    public function scopeSalesCsv(Builder $query, array $params): Builder
+    {
+        $query
+            ->select(DB::raw('price, item_id, count(*) as item_count, sum(price) as sub_total_price'))
+            ->groupBy('item_id', 'price')
+            ->orderBy('item_id');
+
+            if (empty($params)) {
+            return $query;
+        }
+
+        // 検索
+        $status = Arr::get($params, 'status');
+        if (!empty($status)) {
+            $query
+                ->join('orders','orders.id','=','order_items.order_id')
+                ->whereIn('orders.status', $status);
+        }
+
+        return $query;
     }
 }

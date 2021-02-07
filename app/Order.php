@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
@@ -91,5 +92,28 @@ class Order extends Model
             $order->save();
             $order->orderItems()->delete();
         });
+    }
+
+    /**
+     * 検索
+     *
+     * @param Builder $query
+     * @param array $params
+     * @return Builder
+     */
+    public function scopeSerach(Builder $query, array $params): Builder
+    {
+        $query->withTrashed()->orderBy('id', 'desc');
+
+        if (empty($params)) {
+            return $query;
+        }
+
+        $status = Arr::get($params, 'status');
+        if (!empty($status)) {
+            $query->whereIn('status', $status);
+        }
+
+        return $query;
     }
 }

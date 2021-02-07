@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Order;
 use App\OrderItem;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
@@ -36,9 +37,10 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = $this->Orders->withTrashed()->orderBy('id', 'desc')->paginate(20);
+        $params = $request->query();
+        $orders = $this->Orders->serach($params)->paginate(20);
 
         if ($orders->count() == 0) {
             session()->flash('error', '注文が存在しません');
@@ -173,7 +175,13 @@ class OrdersController extends Controller
      */
     public function export( Request $request )
     {
-        $response = new StreamedResponse (function() use ($request){
+        $query = $this->OrderItems->salesCsv($request->query());
+        if (!$query->count()) {
+            session()->flash('error', 'ダウンロードする情報がありません');
+            return redirect(route('admin.orders'));
+        }
+
+        $response = new StreamedResponse (function() use ($query){
             $stream = fopen('php://output', 'w');
 
             // 文字化け回避
@@ -182,11 +190,7 @@ class OrdersController extends Controller
             // タイトルを追加
             fputcsv($stream, ['商品名','数量', '金額']);
 
-            $this->OrderItems
-                ->select(DB::raw('price, item_id, count(*) as item_count, sum(price) as sub_total_price'))
-                ->groupBy('item_id', 'price')
-                ->orderBy('item_id')
-                ->chunk(1000, function($results) use ($stream) {
+            $query->chunk(1000, function($results) use ($stream) {
                     foreach ($results as $result) {
                         fputcsv($stream, [$result->item()->getResults()->getAttribute('name'), $result->item_count, $result->sub_total_price]);
                     }

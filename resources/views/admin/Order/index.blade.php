@@ -1,4 +1,5 @@
 <?php
+use App\Order;
 use Helpers\OrderHelper;
 ?>
 
@@ -33,9 +34,39 @@ use Helpers\OrderHelper;
 
         <div class="card-body">
 			@include('layouts.flash_message')
+			<div class="card mb-2">
+			<div class="card-header">検索</div>
+			<div class="card-body">
+			<form method="get">
+			<div class="form-group">
+				<p class="control-label"><b>ステータス</b></p>
+				<div class="form-inline">
+				@foreach (Order::STATUSES as $key => $status)
+				<?php
+					$request_status = request()->query('status');
+					$checked = ($request_status && in_array($key, $request_status)) ? 'checked="checked"' : null;
+				?>
+				<label class="checkbox-inline ml-1">
+					<input type="checkbox" name="status[]" value="{{ $key }}" {{ $checked }}>{{ $status }}
+				</label>
+				@endforeach
+				</div>
+			</div>
+			<div class="btn-toolbar mx-auto" style="width: 200px;" role="toolbar">
+				<div class="btn-group mr-2" role="group">
+				<button type="submit" class="btn btn-info">検索</button>
+				</div>
+
+				<div class="btn-group mr-2" role="group">
+					<a class="btn btn-secondary" href="{{ route('admin.orders') }}" role="button">クリア</a>
+				</div>
+			</div>
+			</form>
+			</div>
+			</div>
 			@if ($orders->count() != 0)
 			<div class="mb-3">
-			<a href="{{ route('admin.orders.export') }}" class="btn btn-primary font-weight-bold" onclick="return confirm('売上CSVをダウンロードしますか？');"><i class="fas fa-download"></i>売上CSVダウンロード</a>
+			<a href="{{ route('admin.orders.export', request()->query()) }}" class="btn btn-primary font-weight-bold" onclick="return confirm('売上CSVをダウンロードしますか？');"><i class="fas fa-download"></i>売上CSVダウンロード</a>
 			</div>
 			<div class="mt-3">
 				{{ $orders->links() }}
