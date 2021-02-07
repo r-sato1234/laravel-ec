@@ -19,7 +19,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <style>
-        body{background-color: tomato;}
+        body{background-color: #FFF0F5;}
         .col-md-2 .card-body {
             padding:0;
         }
@@ -32,9 +32,6 @@
             line-height: 1.8;
             padding: 0.5em 0.5em 0.5em 0.7em;
             list-style-type: none!important;
-            background: -webkit-linear-gradient(top, #whitesmoke 0%, whitesmoke 100%);
-            background: linear-gradient(to bottom, whitesmoke 0%, #dadada 100%);
-            text-shadow: 1px 1px 1px whitesmoke;
             color: black;
         }
     </style>

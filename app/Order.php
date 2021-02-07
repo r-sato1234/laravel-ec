@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
@@ -65,7 +66,8 @@ class Order extends Model
         return $this
             ->hasMany('App\OrderItem')
             ->select(DB::raw('price, item_id, count(*) as item_count, sum(price) as sub_total_price'))
-            ->groupBy('item_id', 'price');
+            ->groupBy('item_id', 'price')
+            ->withTrashed();
     }
 
     /**
@@ -76,5 +78,42 @@ class Order extends Model
         return $this
             ->belongsTo('App\User')
             ->select('name');
+    }
+
+    /**
+     * 注文削除時はステータスを変更して、注文商品も削除する
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function ($order) {
+            $order->fill(['status' => self::STATUS_CANCELLED]);
+            $order->save();
+            $order->orderItems()->delete();
+        });
+    }
+
+    /**
+     * 検索
+     *
+     * @param Builder $query
+     * @param array $params
+     * @return Builder
+     */
+    public function scopeSerach(Builder $query, array $params): Builder
+    {
+        $query->withTrashed()->orderBy('id', 'desc');
+
+        if (empty($params)) {
+            return $query;
+        }
+
+        $status = Arr::get($params, 'status');
+        if (!empty($status)) {
+            $query->whereIn('status', $status);
+        }
+
+        return $query;
     }
 }

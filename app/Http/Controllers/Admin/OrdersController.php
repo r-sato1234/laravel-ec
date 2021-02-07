@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Order;
+use App\OrderItem;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderDeliveryCompletedMail;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 /**
@@ -25,6 +29,7 @@ class OrdersController extends Controller
     {
         $this->middleware('auth:admin');
         $this->Orders = new Order();
+        $this->OrderItems = new OrderItem();
     }
 
     /**
@@ -32,9 +37,10 @@ class OrdersController extends Controller
      *
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */
-    public function index()
+    public function index(Request $request)
     {
-        $orders = $this->Orders->withTrashed()->orderBy('id', 'desc')->paginate(20);
+        $params = $request->query();
+        $orders = $this->Orders->serach($params)->paginate(20);
 
         if ($orders->count() == 0) {
             session()->flash('error', '注文が存在しません');
@@ -110,11 +116,7 @@ class OrdersController extends Controller
                 throw new \Exception('ステータスが未確認のみキャンセル可能です');
             }
 
-            $order->fill([
-                'status' => Order::STATUS_CANCELLED,
-                'deleted_at' => Carbon::now(),
-            ]);
-            $order->save();
+            $order->delete();
             session()->flash('success', '注文をキャンセルしました');
 
             return redirect(route('admin.orders'));
@@ -163,5 +165,41 @@ class OrdersController extends Controller
         }
 
         return redirect(route('admin.orders'));
+    }
+
+    /**
+     * 売上CSVダウンロード
+     *
+     * @param Request $request
+     * @return Symfony\Component\HttpFoundation\StreamedResponse
+     */
+    public function export( Request $request )
+    {
+        $query = $this->OrderItems->salesCsv($request->query());
+        if (!$query->count()) {
+            session()->flash('error', 'ダウンロードする情報がありません');
+            return redirect(route('admin.orders'));
+        }
+
+        $response = new StreamedResponse (function() use ($query){
+            $stream = fopen('php://output', 'w');
+
+            // 文字化け回避
+            stream_filter_prepend($stream,'convert.iconv.utf-8/cp932//TRANSLIT');
+
+            // タイトルを追加
+            fputcsv($stream, ['商品名','数量', '金額']);
+
+            $query->chunk(1000, function($results) use ($stream) {
+                    foreach ($results as $result) {
+                        fputcsv($stream, [$result->item()->getResults()->getAttribute('name'), $result->item_count, $result->sub_total_price]);
+                    }
+                });
+            fclose($stream);
+        });
+        $response->headers->set('Content-Type', 'application/octet-stream');
+        $response->headers->set('Content-Disposition', 'attachment; filename="order.csv"');
+
+        return $response;
     }
 }
