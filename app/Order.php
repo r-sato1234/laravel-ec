@@ -114,6 +114,15 @@ class Order extends Model
             $query->whereIn('status', $status);
         }
 
+        $created_at_start = Arr::get($params, 'created_at_start');
+        if ($created_at_start) {
+            $query->whereDate('created_at', '>=', $created_at_start);
+        }
+        $created_at_end = Arr::get($params, 'created_at_end');
+        if ($created_at_end) {
+            $query->whereDate('created_at', '<=', $created_at_end);
+        }
+
         return $query;
     }
 }

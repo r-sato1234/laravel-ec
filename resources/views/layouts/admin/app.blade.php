@@ -18,6 +18,10 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
+    @section('head')
+    @show
+
     <style>
         body{background-color: #FFF0F5;}
         .col-md-2 .card-body {
@@ -95,5 +99,8 @@
             </div>
         </main>
     </div>
+
+    @section('footer')
+    @show
 </body>
 </html>

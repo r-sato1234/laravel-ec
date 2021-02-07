@@ -56,16 +56,25 @@ class OrderItem extends Model
             ->groupBy('item_id', 'price')
             ->orderBy('item_id');
 
-            if (empty($params)) {
+        if (empty($params)) {
             return $query;
         }
+
+        $query->join('orders','orders.id','=','order_items.order_id');
 
         // 検索
         $status = Arr::get($params, 'status');
         if (!empty($status)) {
-            $query
-                ->join('orders','orders.id','=','order_items.order_id')
-                ->whereIn('orders.status', $status);
+            $query->whereIn('orders.status', $status);
+        }
+
+        $created_at_start = Arr::get($params, 'created_at_start');
+        if ($created_at_start) {
+            $query->whereDate('orders.created_at', '>=', $created_at_start);
+        }
+        $created_at_end = Arr::get($params, 'created_at_end');
+        if ($created_at_end) {
+            $query->whereDate('orders.created_at', '<=', $created_at_end);
         }
 
         return $query;

@@ -5,6 +5,15 @@ use Helpers\OrderHelper;
 
 @extends('layouts.admin.app')
 
+@section('head')
+	@parent
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"/>
+  	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/locales/bootstrap-datepicker.ja.min.js"></script>
+@endsection
+
 @section('content')
 <style>
 	.font-large {
@@ -39,17 +48,24 @@ use Helpers\OrderHelper;
 			<div class="card-body">
 			<form method="get">
 			<div class="form-group">
-				<p class="control-label"><b>ステータス</b></p>
-				<div class="form-inline">
+				<p class="control-label d-inline"><b>ステータス&ensp;:&ensp;</b></p>
+				<div class="form-inline d-inline">
 				@foreach (Order::STATUSES as $key => $status)
 				<?php
 					$request_status = request()->query('status');
 					$checked = ($request_status && in_array($key, $request_status)) ? 'checked="checked"' : null;
 				?>
-				<label class="checkbox-inline ml-1">
+				<label class="checkbox-inline ml-1 d-inline">
 					<input type="checkbox" name="status[]" value="{{ $key }}" {{ $checked }}>{{ $status }}
 				</label>
 				@endforeach
+				</div>
+			</div>
+			<div class="form-group">
+				<p class="control-label d-inline"><b>注文日時&ensp;:&ensp;</b></p>
+				<div class="form-inline d-inline">
+				<input class="date form-control" name="created_at_start" type="text" value="{{ request()->query('created_at_start') }}">&ensp;~&ensp;
+				<input class="date form-control" name="created_at_end" type="text" value="{{ request()->query('created_at_end') }}">
 				</div>
 			</div>
 			<div class="btn-toolbar mx-auto" style="width: 200px;" role="toolbar">
@@ -143,4 +159,11 @@ use Helpers\OrderHelper;
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $('.date').datepicker({
+	  language:'ja',
+	  format: 'yyyy-mm-dd'
+    });
+</script>
 @endsection
