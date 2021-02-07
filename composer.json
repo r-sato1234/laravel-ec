@@ -42,7 +42,8 @@
         ],
         "files": [
             "app/Http/Helpers/OrderHelper.php",
-            "app/Http/Helpers/ItemHelper.php"
+            "app/Http/Helpers/ItemHelper.php",
+            "app/Http/Helpers/MenuHelper.php"
         ]
     },
     "autoload-dev": {
