@@ -110,11 +110,7 @@ class OrdersController extends Controller
                 throw new \Exception('ステータスが未確認のみキャンセル可能です');
             }
 
-            $order->fill([
-                'status' => Order::STATUS_CANCELLED,
-                'deleted_at' => Carbon::now(),
-            ]);
-            $order->save();
+            $order->delete();
             session()->flash('success', '注文をキャンセルしました');
 
             return redirect(route('admin.orders'));

@@ -65,7 +65,8 @@ class Order extends Model
         return $this
             ->hasMany('App\OrderItem')
             ->select(DB::raw('price, item_id, count(*) as item_count, sum(price) as sub_total_price'))
-            ->groupBy('item_id', 'price');
+            ->groupBy('item_id', 'price')
+            ->withTrashed();
     }
 
     /**
@@ -76,5 +77,19 @@ class Order extends Model
         return $this
             ->belongsTo('App\User')
             ->select('name');
+    }
+
+    /**
+     * 注文削除時はステータスを変更して、注文商品も削除する
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::deleted(function ($order) {
+            $order->fill(['status' => self::STATUS_CANCELLED]);
+            $order->save();
+            $order->orderItems()->delete();
+        });
     }
 }
