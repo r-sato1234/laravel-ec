@@ -58,7 +58,7 @@ use Helpers\ItemHelper;
 						@endif
 					</div>
 					</td>
-					<td>{!!  ItemHelper::getStatusLabel($item) !!}</td>
+					<td>{{  ItemHelper::getStatusLabel($item) }}</td>
 					<td>{{ $item->name }}</td>
 					<td><img src="/uploads/items/{{ $item->id }}/{{ $item->img }}" width="50px" height="50px"></td>
 					<td>{{ $item->price }}円</td>

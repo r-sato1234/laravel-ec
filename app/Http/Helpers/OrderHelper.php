@@ -3,6 +3,7 @@
 namespace Helpers;
 
 use App\Order;
+use Illuminate\Support\HtmlString;
 
 
 class OrderHelper {
@@ -30,6 +31,6 @@ class OrderHelper {
         <span class="$class font-large">$order->status_text</span>
         EOD;
 
-        return $content;
+        return new HtmlString($content);
     }
 }
