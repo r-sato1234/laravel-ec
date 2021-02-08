@@ -21,6 +21,7 @@
 				$description = old('description');
 				$price = old('price');
 				$tag_for_search = old('tag_for_search');
+				$stock = old('stock');
 				?>
 			@else
 				<?php
@@ -28,6 +29,7 @@
 				$description = $item->description;
 				$price = $item->price;
 				$tag_for_search = $item->tag_for_search;
+				$stock = $item->stock;
 				?>
 			@endif
 
@@ -35,7 +37,7 @@
 				{{ csrf_field() }}
 				<table class="table">
 					<tr>
-					<td>商品名</td>
+					<td>商品名<span class="badge badge-danger ml-1">必須</span></td>
 					<td>
 						<input type="text" name="name" class="form-control @error('name') is-invalid @enderror" value="{{ $name }}">
 						@error('name')
@@ -47,7 +49,7 @@
 					</tr>
 
 					<tr>
-					<td>画像</td>
+					<td>画像@if($is_create)<span class="badge badge-danger ml-1">必須@endif</span></td>
 					<td>
 						<input type="file" name="img" class="@error('img') is-invalid @enderror">
 						@error('img')
@@ -59,7 +61,7 @@
 					</tr>
 
 					<tr>
-					<td>価格</td>
+					<td>価格<span class="badge badge-danger ml-1">必須</span></td>
 					<td>
 						<input type="text" name="price" class="form-control @error('price') is-invalid @enderror" value="{{ $price }}">
 						@error('price')
@@ -71,7 +73,19 @@
 					</tr>
 
 					<tr>
-					<td>説明文</td>
+					<td>在庫数<span class="badge badge-danger ml-1">必須</span></td>
+					<td>
+						<input type="text" name="stock" class="form-control @error('stock') is-invalid @enderror" value="{{ $stock }}">
+						@error('stock')
+							<span class="invalid-feedback" role="alert">
+								<strong>{{ $message }}</strong>
+							</span>
+						@enderror
+					</td>
+					</tr>
+
+					<tr>
+					<td>説明文<span class="badge badge-danger ml-1">必須</span></td>
 					<td>
 						<textarea name="description" class="form-control @error('description') is-invalid @enderror">{{ $description }}</textarea>
 						@error('description')
@@ -83,7 +97,7 @@
 					</tr>
 
 					<tr>
-					<td>検索用タグ</td>
+					<td>検索用タグ<span class="badge badge-danger ml-1">必須</span></td>
 					<td>
 						<input type="text" name="tag_for_search" class="form-control @error('tag_for_search') is-invalid @enderror" value="{{ $tag_for_search }}">
 						@error('tag_for_search')
