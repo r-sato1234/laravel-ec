@@ -19,7 +19,9 @@ class CreateAddressesTable extends Migration {
 			$table->integer('user_id');
 			$table->integer('prefecture_id');
 			$table->string('zip', 7);
-			$table->string('address', 100);
+			$table->string('address1', 100);
+			$table->string('address2', 100);
+			$table->string('address3', 100);
 			$table->timestamps();
 			$table->softDeletes();
 		});

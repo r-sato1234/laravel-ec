@@ -43,22 +43,8 @@ use Helpers\OrderHelper;
 						</form>
 					</div>
 				</div>
-				@elseif ($order->is_confirmed)
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group mr-2" role="group">
-						<form action="{{ route('admin.orders.deliveryComplete', ['id' => $order->id]) }}" id="form_delivery_complete" method="post">
-						{{ csrf_field() }}
-						<a href="#" data-id="{{ $order->id }}" class="btn btn-primary btn-sm" onclick="deliveryCompletePost();">配送完了メール送信</a>
-						</form>
-					</div>
-				</div>
 				@endif
 				</td>
-				</tr>
-
-				<tr>
-				<td>注文者名</td>
-				<td>{{ $order->user()->getResults()->name }}</td>
 				</tr>
 
 				<tr>
@@ -86,6 +72,29 @@ use Helpers\OrderHelper;
 				<td>{{ $order->deleted_at }}</td>
 				</tr>
 				@endif
+			</table>
+
+			<p class="h3">配送先</p>
+			@if ($order->is_confirmed)
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group mb-2" role="group">
+						<form action="{{ route('admin.orders.deliveryComplete', ['id' => $order->id]) }}" id="form_delivery_complete" method="post">
+						{{ csrf_field() }}
+						<a href="#" data-id="{{ $order->id }}" class="btn btn-primary btn-sm" onclick="deliveryCompletePost();">配送完了メール送信</a>
+						</form>
+					</div>
+				</div>
+				@endif
+			<table class="table">
+				<tr>
+				<td>注文者名</td>
+				<td>{{ $order->user()->getResults()->name }}</td>
+				</tr>
+
+				<tr>
+				<td>住所</td>
+				<td>{!! nl2br(e($order->address()->getResults()->full_address)) !!}</td>
+				</tr>
 			</table>
 
 			<p class="h3">注文商品</p>
