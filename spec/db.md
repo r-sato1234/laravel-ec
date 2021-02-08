@@ -29,7 +29,9 @@ CREATE TABLE addresses (
     user_id INT NOT NULL                        /* ユーザーID */,
     prefecture_id INT NOT NULL,                 /* 都道府県ID */
     zip VARCHAR(7) NOT NULL,                    /* 郵便番号 */
-    address VARCHAR(100) NOT NULL,              /* 住所(都道府県市区町村) */
+    address1 VARCHAR(100) NOT NULL,             /* 住所(市区町村) */
+    address2 VARCHAR(100) NOT NULL,             /* 住所(番地) */
+    address3 VARCHAR(100) NOT NULL,             /* 住所(その他) */
     created_at DATETIME NOT NULL,               /* 作成日時 */
     updated_at DATETIME NOT NULL,               /* 更新日時 */
     deleted_at DATETIME DEFAULT NULL            /* 削除日時 */

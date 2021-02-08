@@ -81,6 +81,16 @@ class Order extends Model
     }
 
     /**
+     * 配送先を取得
+     */
+    public function address()
+    {
+        return $this
+            ->belongsTo('App\Address')
+            ->select('prefecture_id', 'zip', 'address1', 'address2', 'address3');
+    }
+
+    /**
      * 注文削除時はステータスを変更して、注文商品も削除する
      */
     public static function boot()

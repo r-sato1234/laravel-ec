@@ -30,7 +30,9 @@ class UsersTableSeeder extends Seeder
                 'user_id' => 1,
                 'prefecture_id' => 13,
                 'zip' => '1600022',
-                'address' => '東京都新宿区新宿1-1',
+                'address1' => '新宿区新宿',
+                'address2' => '1-1',
+                'address3' => '新宿ビル1階',
                 'created_at' => '2021-01-01 10:00:00',
                 'updated_at' => '2021-01-01 10:00:00'
             ],
@@ -38,7 +40,9 @@ class UsersTableSeeder extends Seeder
                 'user_id' => 1,
                 'prefecture_id' => 13,
                 'zip' => '1600022',
-                'address' => '東京都新宿区新宿2-1',
+                'address1' => '新宿区新宿',
+                'address2' => '2-1',
+                'address3' => '新宿ビル2階',
                 'created_at' => '2021-01-01 10:00:00',
                 'updated_at' => '2021-01-01 10:00:00'
             ],
