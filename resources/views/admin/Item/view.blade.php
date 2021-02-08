@@ -19,7 +19,7 @@ use Helpers\ItemHelper;
 			<table class="table">
 				<tr>
 				<td>販売ステータス</td>
-				<td>{!!  ItemHelper::getStatusLabel($item) !!}</td>
+				<td>{{  ItemHelper::getStatusLabel($item) }}</td>
 				</tr>
 
 				<td>商品名</td>

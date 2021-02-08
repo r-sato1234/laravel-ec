@@ -10,11 +10,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Auth::routes();
 
 /*
@@ -39,7 +34,7 @@ Route::group(['middleware' => 'auth:user'], function() {
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'admin'], function() {
-    Route::get('/',         function () { return redirect('/admin/home'); });
+    Route::get('/',         function () { return redirect('/admin/login'); });
     Route::get('login',     'Admin\LoginController@showLoginForm')->name('admin.login');
     Route::post('login',    'Admin\LoginController@login');
 });
@@ -50,8 +45,8 @@ Route::group(['prefix' => 'admin'], function() {
 |--------------------------------------------------------------------------
 */
 Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function() {
+    Route::get('/',         function () { return redirect('/admin/orders'); });
     Route::post('logout', 'Admin\LoginController@logout')->name('admin.logout');
-    Route::get('home', 'Admin\HomeController@index')->name('admin.home');
     Route::get('items', 'Admin\ItemsController@index')->name('admin.items');
     Route::match(['get', 'post'], 'items/add', 'Admin\ItemsController@add')->name('admin.items.add');
     Route::match(['get', 'post'], 'items/edit/{id}', 'Admin\ItemsController@edit')->name('admin.items.edit');

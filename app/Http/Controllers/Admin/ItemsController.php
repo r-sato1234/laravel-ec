@@ -115,9 +115,9 @@ class ItemsController extends Controller
             'description' => $request->input('description'),
             'price' => $request->input('price'),
             'tag_for_search' => $request->input('tag_for_search'),
+            'stock' => $request->input('stock'),
             'img' => $file_name
         ]);
-        // set_message('商品を追加しました。');
         session()->flash('success', '商品を追加しました');
 
         return redirect(route('admin.items'));
@@ -132,16 +132,20 @@ class ItemsController extends Controller
      */
     public function update(ItemRequest $request, $id) {
         $item = $this->Items->findOrFail($id);
-        $file_name = $this->__imgUpdate($request->file('img'), $id);
-        $item->fill([
+        $save_data = [
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'price' => $request->input('price'),
             'tag_for_search' => $request->input('tag_for_search'),
-            'img' => $file_name
-        ]);
+            'stock' => $request->input('stock'),
+        ];
+        $file_name = $this->__imgUpdate($request->file('img'), $id);
+
+        if ($file_name) {
+            $save_data['img'] = $file_name;
+        }
+        $item->fill($save_data);
         $item->save();
-        // set_message('内容を修正しました。');
         session()->flash('success', '商品を編集しました');
 
         return redirect(route('admin.items.view', ['id' => $id]));
@@ -248,6 +252,11 @@ class ItemsController extends Controller
      */
     private function __imgUpdate($file, $id) {
         $file_name = '';
+
+        if (!$file) {
+            return $file_name;
+        }
+
         if ($file->isValid()) {
             $file_name = time() . '_' . $file->getClientOriginalName();
             $target_path = public_path('uploads/items/' . $id . '/');

@@ -23,12 +23,15 @@ class ItemRequest extends FormRequest
      */
     public function rules()
     {
+        $is_edit = ($this->route()->parameter('id')) ? true : false;
+
         return [
             'name' => 'required|string|max:100',
             'price' => 'required|integer',
+            'stock' => 'required|integer',
             'description' => 'required|string|max:2000',
             'tag_for_search' => 'required|string|max:1000',
-            'img' => 'required|image|file',
+            'img' => ($is_edit) ? 'nullable|image|file' : 'required|image|file',
         ];
     }
 
@@ -44,7 +47,8 @@ class ItemRequest extends FormRequest
             'price' => '価格',
             'description' => '説明文',
             'tag_for_search' => '検索用タグ',
-            'img' => '画像'
+            'img' => '画像',
+            'stock' => '在庫数'
         ];
     }
 }

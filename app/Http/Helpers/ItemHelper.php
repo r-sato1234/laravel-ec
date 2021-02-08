@@ -3,6 +3,7 @@
 namespace Helpers;
 
 use App\Item;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -45,6 +46,6 @@ class ItemHelper {
             EOD;
         }
 
-        return $content;
+        return new HtmlString($content);
     }
 }

@@ -7,7 +7,6 @@ use Helpers\OrderHelper;
 
 @section('head')
 	@parent
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css"/>
   	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
@@ -111,7 +110,7 @@ use Helpers\OrderHelper;
 						<tr class="d-flex">
 						<td class="col-1"><a data-toggle="collapse" href="#collapse-{{ $order->id }}" role="button" aria-expanded="false" aria-controls="collapseExample">▼</a></td>
 						<td class="col-3"><a href="{{ route('admin.orders.view', ['id' => $order->id]) }}">{{ $order->order_code }}</a></td>
-						<td class="col-2">{!!  OrderHelper::getStatusLabel($order) !!}</td>
+						<td class="col-2">{{ OrderHelper::getStatusLabel($order) }}</td>
 						<td class="col-3">{{ $order->user()->getResults()->getAttribute('name') }}</td>
 						<td class="col-3">{{ $order->created_at }}</td>
 						</tr>
